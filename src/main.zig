@@ -1,7 +1,5 @@
 const std = @import("std");
-
-const problem1 = @import("problems/problem1.zig");
-const problem2 = @import("problems/problem2.zig");
+const problems = @import("problems");
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -24,11 +22,5 @@ pub fn main() !void {
         break :blk 1;
     };
 
-    switch (problem_num) {
-        1 => try problem1.run(allocator),
-        2 => try problem2.run(allocator),
-        else => {
-            return error.InvalidProblem;
-        },
-    }
+    try problems.dispatch(problem_num, allocator);
 }

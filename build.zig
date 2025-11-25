@@ -21,6 +21,20 @@ pub fn build(b: *std.Build) void {
     // target and optimize options) will be listed when running `zig build --help`
     // in this directory.
 
+    // Generate problems.zig at build time
+    const gen_problems = b.addExecutable(.{
+        .name = "gen_problems",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("tools/gen_problems.zig"),
+            .target = target,
+            .optimize = optimize,
+        }),
+    });
+
+    const run_gen = b.addRunArtifact(gen_problems);
+    run_gen.setCwd(b.path("."));  // Run from project root
+    run_gen.addArg("src/problems.zig");  // Output file path
+
     // This creates a module, which represents a collection of source files alongside
     // some compilation options, such as optimization mode and linked system libraries.
     // Zig modules are the preferred way of making Zig code available to consumers.
@@ -79,9 +93,18 @@ pub fn build(b: *std.Build) void {
                 // can be extremely useful in case of collisions (which can happen
                 // importing modules from different packages).
                 .{ .name = "zig_algorithms", .module = mod },
+                // Generated problems registry
+                .{ .name = "problems", .module = b.createModule(.{
+                    .root_source_file = b.path("src/problems.zig"),
+                    .target = target,
+                    .optimize = optimize,
+                }) },
             },
         }),
     });
+
+    // Ensure generator runs before building executable
+    exe.step.dependOn(&run_gen.step);
 
     // This declares intent for the executable to be installed into the
     // install prefix when running `zig build` (i.e. when executing the default
