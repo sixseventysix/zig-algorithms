@@ -4,6 +4,12 @@ const io = @import("../utils/io.zig");
 // Codeforces Round 1065 Div 3 Problem C2
 // https://codeforces.com/contest/2171/problem/C2
 
+// an extension to problem 1. essentially like playing parallel versions of the same game across various bit positions.
+// we will start with the MSB because if a player wins the MSB position (playing the same game as problem 1), they win the game here.
+// winning the MSB position (i.e. having a higher bit value in the MSB) would mean the final value of the XOR sum will be greater,
+// so we only need to worry about the MSB. if there's a tie in the MSB, the MSB position gets decremented.
+// according to constraints, max value for numbers in the arrays is 10**6 which fits into 20 bits.
+
 fn solve1(a: []const u8, b: []const u8) []const u8 {
     var xor_a: u8 = 0;
     var xor_b: u8 = 0;

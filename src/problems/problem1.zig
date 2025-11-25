@@ -4,6 +4,12 @@ const io = @import("../utils/io.zig");
 // Codeforces Round 1065 Div 3 Problem C1
 // https://codeforces.com/contest/2171/problem/C1
 
+// beating the other player involves having a higher XOR sum. for binary input, this means possible values are only 0 & 1.
+// swapping a_i and b_i when they are equal will have no effect, so all significant moves happen only when a_i != b_i.
+// a swap will always invert the result of the XOR sum for both you and your opponent. if both players have the same XOR sum
+// at init, then it always ends in a tie.
+// if the XOR sums are differing, then the player that has the final significant move wins the game as they can choose whether to swap or not.
+
 fn solve(a: []const u8, b: []const u8) []const u8 {
     var xor_a: u8 = 0;
     var xor_b: u8 = 0;
