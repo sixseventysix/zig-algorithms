@@ -1,6 +1,9 @@
 const std = @import("std");
 const io = @import("../utils/io.zig");
 
+// Codeforces contest 2172 problem I
+// https://codeforces.com/problemset/problem/2172/I
+
 // example inputs:
 
 // 7 15
